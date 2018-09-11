@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = %q{Adds a deploy command to git that uses the GitHub deployments API}
   spec.description   = %q{Run git deploy within a git repository to create a GitHub deployment.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.homepage      = 'https://github.com/sonerdy/ghdeploy'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|

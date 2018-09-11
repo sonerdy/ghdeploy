@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+require 'ghdeploy/cli'
+
+Ghdeploy::CLI.start

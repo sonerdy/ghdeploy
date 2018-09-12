@@ -12,7 +12,7 @@ class RepoFactFinder
 
   def host
     return @host if @host
-    url = Git.open('./').remotes.find { |r| r.name == remote_name }.url
+    url = remote.url
     if url.start_with?('http')
       matches = URL_PATTERN.match(url)
       @host = "#{matches[2]}://api.#{matches[3]}"
@@ -20,5 +20,21 @@ class RepoFactFinder
       host = url.split('@').last.split(':').first
       @host = "https://api.#{host}"
     end
+  end
+
+  def repo
+    return @repo if @repo
+    repo = url.split(/\/|:/).last(2).join('/')
+    @repo = repo.gsub(/(\.git)$/, '')
+  end
+
+  private
+
+  def url
+    remote.url
+  end
+
+  def remote
+    @remote ||= Git.open('./').remotes.find { |r| r.name == remote_name }
   end
 end

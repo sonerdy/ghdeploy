@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
 require 'ghdeploy/cli'
 
-Ghdeploy::CLI.start
+ARGV.unshift('deploy')
+Ghdeploy::CLI.start(ARGV)

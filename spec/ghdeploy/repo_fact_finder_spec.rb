@@ -1,22 +1,23 @@
 RSpec.describe RepoFactFinder do
+  let(:remote_name) { 'origin' }
+  let(:remote_url) { 'git@github.com:sonerdy/fake-repo.git' }
+  let(:other_remote_url) { 'git@github.com:sonerdy/other-repo.git' }
+  let(:remotes) do
+    [
+      double(name: 'origin', url: remote_url),
+      double(name: 'other', url: other_remote_url),
+    ]
+  end
+  let(:stub_git) do
+    double(remotes: remotes)
+  end
+
+  before do
+    allow(Git).to receive(:open).with('./').and_return(stub_git)
+  end
+
   describe '#host' do
     subject { described_class.new(remote_name).host }
-    let(:remote_name) { 'origin' }
-    let(:remote_url) { 'git@github.com:sonerdy/fake-repo' }
-    let(:other_remote_url) { 'git@github.com:sonerdy/other-repo' }
-    let(:remotes) do
-      [
-        double(name: 'origin', url: remote_url),
-        double(name: 'other', url: other_remote_url),
-      ]
-    end
-    let(:stub_git) do
-      double(remotes: remotes)
-    end
-
-    before do
-      allow(Git).to receive(:open).with('./').and_return(stub_git)
-    end
 
     specify { expect(subject).to eq 'https://api.github.com' }
 
@@ -36,6 +37,17 @@ RSpec.describe RepoFactFinder do
       let(:other_remote_url) { 'git@other-github.com:sonerdy/other-repo' }
 
       specify { expect(subject).to eq('https://api.other-github.com') }
+    end
+  end
+
+  describe '#repo' do
+    subject { described_class.new(remote_name).repo }
+
+    specify { expect(subject).to eq 'sonerdy/fake-repo' }
+
+    context 'when remote is https' do
+      let(:remote_url) { 'https://github.com/sonerdy/fake-repo.git' }
+      specify { expect(subject).to eq 'sonerdy/fake-repo' }
     end
   end
 end

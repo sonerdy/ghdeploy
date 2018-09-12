@@ -1,5 +1,7 @@
-require "bundler/setup"
-require "ghdeploy"
+require 'bundler/setup'
+require 'ghdeploy'
+require 'ghdeploy/cli'
+require 'ghdeploy/repo_fact_finder'
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

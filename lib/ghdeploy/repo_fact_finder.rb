@@ -28,6 +28,16 @@ class RepoFactFinder
     @repo = repo.gsub(/(\.git)$/, '')
   end
 
+  def token
+    github_host = host.gsub(/^http[s]?:\/\/api\./, '')
+    if github_host == 'github.com'
+      ENV.fetch('GHDEPLOY_TOKEN')
+    else
+      key = github_host.gsub(/[\.\-]/, '_').upcase
+      ENV.fetch("GHDEPLOY_#{key}_TOKEN")
+    end
+  end
+
   private
 
   def url

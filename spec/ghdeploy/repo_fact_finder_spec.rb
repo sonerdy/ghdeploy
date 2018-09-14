@@ -1,3 +1,5 @@
+require 'securerandom'
+
 RSpec.describe RepoFactFinder do
   let(:remote_name) { 'origin' }
   let(:remote_url) { 'git@github.com:sonerdy/fake-repo.git' }
@@ -48,6 +50,33 @@ RSpec.describe RepoFactFinder do
     context 'when remote is https' do
       let(:remote_url) { 'https://github.com/sonerdy/fake-repo.git' }
       specify { expect(subject).to eq 'sonerdy/fake-repo' }
+    end
+  end
+
+  describe '#token' do
+    subject { described_class.new(remote_name).token }
+    let(:token) { SecureRandom.uuid }
+
+    context 'when remote is github.com' do
+      let(:remote_url) { 'git@github.com:sonerdy/fake-repo' }
+      before do
+        allow(ENV).to receive(:fetch).with('GHDEPLOY_TOKEN').and_return(token)
+      end
+
+      it 'uses token from GHDEPLOY_TOKEN environment variable' do
+        expect(subject).to eq token
+      end
+    end
+
+    context 'when remote is not github.com' do
+      let(:remote_url) { 'git@internal-github.com:sonerdy/fake-repo' }
+      before do
+        allow(ENV).to receive(:fetch).with('GHDEPLOY_INTERNAL_GITHUB_COM_TOKEN').and_return(token)
+      end
+
+      it 'uses token from host-specific environment variable' do
+        expect(subject).to eq token
+      end
     end
   end
 end

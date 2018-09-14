@@ -15,7 +15,7 @@ module Ghdeploy
 
 			facts = RepoFactFinder.new(remote_name)
       Octokit.configure { |c| c.api_endpoint = facts.host }
-			client = Octokit::Client.new(access_token: ENV.fetch('GHDEPLOY_TOKEN'))
+			client = Octokit::Client.new(access_token: facts.token)
 			deployment = client.create_deployment(facts.repo, ref, environment: environment)
       puts "Deployment created!" if deployment.url
 		end

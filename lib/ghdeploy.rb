@@ -1,4 +1,4 @@
-require "ghdeploy/version"
+require 'ghdeploy/version'
 
 module Ghdeploy
 end

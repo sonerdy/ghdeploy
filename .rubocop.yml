@@ -1,0 +1,29 @@
+require: rubocop-rspec
+
+AllCops:
+  Include:
+    - Gemfile
+    - lib/**/*
+    - spec/**/*
+  Exclude:
+    - bin/**/*
+
+Style/Documentation:
+  Enabled: false
+
+Style/GuardClause:
+  Enabled: false
+
+Style/BlockDelimiters:
+  Exclude:
+    - 'spec/**/*'
+
+Metrics/LineLength:
+  Max: 100
+
+Metrics/MethodLength:
+  Max: 12
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*.rb'

@@ -1,7 +1,7 @@
 require 'git'
 
 class RepoFactFinder
-  URL_PATTERN = /^((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?/
+  URL_PATTERN = %r{^((http[s]?|ftp):/)?/?([^:/\s]+)((/\w+)*/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?}
 
   def initialize(remote_name)
     @remote_name = remote_name
@@ -24,16 +24,19 @@ class RepoFactFinder
 
   def repo
     return @repo if @repo
-    repo = url.split(/\/|:/).last(2).join('/')
+    repo = url.split(%r{/|:}).last(2).join('/')
     @repo = repo.gsub(/(\.git)$/, '')
   end
 
   def token
-    github_host = api_endpoint.gsub(/^http[s]?:\/\//, '')
+    github_host = api_endpoint.gsub(%r{^http[s]?://}, '')
     if github_host == 'api.github.com'
       ENV.fetch('GHDEPLOY_TOKEN')
     else
-      key = github_host.gsub(/[\.\-]/, '_').upcase.gsub(/\/API\/V3\//, '')
+      key = github_host
+            .gsub(/[\.\-]/, '_')
+            .upcase
+            .gsub(%r{/API/V3/}, '')
       ENV.fetch("GHDEPLOY_#{key}_TOKEN")
     end
   end
@@ -50,7 +53,7 @@ class RepoFactFinder
 
   def fix_enterprise_api_endpoint(host)
     return host if host == 'https://api.github.com'
-    enterprise_domain = host.gsub(/^http[s]?:\/\/api\./, '')
+    enterprise_domain = host.gsub(%r{^http[s]?://api\.}, '')
     "https://#{enterprise_domain}/api/v3/"
   end
 end

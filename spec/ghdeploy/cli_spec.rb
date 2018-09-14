@@ -11,7 +11,7 @@ RSpec.describe Ghdeploy::CLI do
     let(:branch) { 'master' }
     let(:stub_client) { double }
     let(:repo_fact_stub) do
-      double(host: github_host, repo: 'sonerdy/fake-repo', token: access_token)
+      instance_double(RepoFactFinder, api_endpoint: github_host, repo: 'sonerdy/fake-repo', token: access_token)
     end
     let(:github_host) { 'https://api.github.com' }
     let(:access_token) { 'random-token' }

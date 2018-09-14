@@ -18,8 +18,8 @@ RSpec.describe RepoFactFinder do
     allow(Git).to receive(:open).with('./').and_return(stub_git)
   end
 
-  describe '#host' do
-    subject { described_class.new(remote_name).host }
+  describe '#api_endpoint' do
+    subject { described_class.new(remote_name).api_endpoint }
 
     specify { expect(subject).to eq 'https://api.github.com' }
 
@@ -31,14 +31,14 @@ RSpec.describe RepoFactFinder do
 
     context 'when a non-github domain is used' do
       let(:remote_url) { 'git@my-enterprise-git.com:sonerdy/fake-repo' }
-      specify { expect(subject).to eq 'https://api.my-enterprise-git.com' }
+      specify { expect(subject).to eq 'https://my-enterprise-git.com/api/v3/' }
     end
 
     context 'when non-origin remote is used' do
       let(:remote_name) { 'other' }
       let(:other_remote_url) { 'git@other-github.com:sonerdy/other-repo' }
 
-      specify { expect(subject).to eq('https://api.other-github.com') }
+      specify { expect(subject).to eq('https://other-github.com/api/v3/') }
     end
   end
 

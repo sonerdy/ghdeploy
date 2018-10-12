@@ -27,3 +27,13 @@ Basic deploy of master branch to production:
 ```
 git deploy production master
 ```
+
+**Note** *If you are using RVM and are the following error 
+
+```
+git: 'deploy' is not a git command. See 'git --help'.
+```
+while trying to run the above command, run this first:
+```
+rvm use 2.3.6
+```
